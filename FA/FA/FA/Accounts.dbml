@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="AccountDB" Class="AccountsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=AccountDB;Integrated Security=True" SettingsObjectName="FA.Properties.Settings" SettingsPropertyName="AccountDBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.BalanceSheet" Member="BalanceSheets">
+    <Type Name="BalanceSheet">
+      <Column Name="ACCOUNTID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ACCOUNTNAME" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ACCOUNTTOTAL" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="TYPE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ChartOfAccounts" Member="ChartOfAccounts">
+    <Type Name="ChartOfAccount">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="num" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="e_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="ChartOfAccount_Journal" Member="Journals" ThisKey="id" OtherKey="acc_id" Type="Journal" />
+      <Association Name="ChartOfAccount_Posting" Member="Postings" ThisKey="id" OtherKey="acc_id" Type="Posting" />
+      <Association Name="Ledger_ChartOfAccount" Member="Ledger" ThisKey="type" OtherKey="type" Type="Ledger" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FiscalYear" Member="FiscalYears">
+    <Type Name="FiscalYear">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="f_from" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="f_to" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="e_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IncomeStatement" Member="IncomeStatements">
+    <Type Name="IncomeStatement">
+      <Column Name="Type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="AccountId" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="AccountName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="value" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="NetProfit" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Journal" Member="Journals">
+    <Type Name="Journal">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="acc_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="amount" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="des" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="type" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="e_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="ChartOfAccount_Journal" Member="ChartOfAccount" ThisKey="acc_id" OtherKey="id" Type="ChartOfAccount" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Ledgers" Member="Ledgers">
+    <Type Name="Ledger">
+      <Column Name="type" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="e_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="Ledger_ChartOfAccount" Member="ChartOfAccounts" ThisKey="type" OtherKey="type" Type="ChartOfAccount" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OwnerEquity" Member="OwnerEquities">
+    <Type Name="OwnerEquity">
+      <Column Name="OldCapital" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="newcapital" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="netincome" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ow" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="finalcapital" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="fromDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="toDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Postings" Member="Postings">
+    <Type Name="Posting">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="acc_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="acc_num" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="type" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="amount" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="e_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="ChartOfAccount_Posting" Member="ChartOfAccount" ThisKey="acc_id" OtherKey="id" Type="ChartOfAccount" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TrialBalance" Member="TrialBalances">
+    <Type Name="TrialBalance">
+      <Column Name="AccountId" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="AccountName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Debit" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Credit" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.CheckNameOfChartOfAccounts" Method="CheckNameOfChartOfAccounts">
+    <Parameter Name="name" Type="System.String" DbType="NVarChar(50)" />
+    <ElementType Name="CheckNameOfChartOfAccountsResult">
+      <Column Name="name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.ClearAccountDB" Method="ClearAccountDB">
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.DeleteChartOfAccounts" Method="DeleteChartOfAccounts">
+    <Parameter Name="id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GenerateTrialBalance" Method="GenerateTrialBalance">
+    <Parameter Name="from" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="to" Type="System.DateTime" DbType="Date" />
+    <ElementType Name="GenerateTrialBalanceResult">
+      <Column Name="AccountId" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="AccountName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Debit" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Credit" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.GetAccountId" Method="GetAccountId">
+    <Parameter Name="type" Type="System.String" DbType="NVarChar(50)" />
+    <ElementType Name="GetAccountIdResult">
+      <Column Name="" Member="Column1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.InsertChartOfAccounts" Method="InsertChartOfAccounts">
+    <Parameter Name="num" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="name" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="type" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="e_date" Type="System.DateTime" DbType="Date" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertFiscalYear" Method="InsertFiscalYear">
+    <Parameter Name="from_n" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="to_n" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="to" Type="System.DateTime" DbType="Date" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertJournalAndPosting" Method="InsertJournalAndPosting">
+    <Parameter Name="ACCiD" Parameter="aCCiD" Type="System.Int32" DbType="Int" />
+    <Parameter Name="acc_num" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Amount" Parameter="amount" Type="System.Double" DbType="Float" />
+    <Parameter Name="Des" Parameter="des" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="type" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="eDate" Type="System.DateTime" DbType="Date" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ShowChartOfAccounts" Method="ShowChartOfAccounts">
+    <ElementType Name="ShowChartOfAccountsResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="[ACCOUNT ID]" Member="ACCOUNT_ID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="NAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TYPE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="[OPENING DATE]" Member="OPENING_DATE" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.ShowFiscalYear" Method="ShowFiscalYear">
+    <ElementType Name="ShowFiscalYearResult">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="f_from" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="f_to" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="e_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.ShowLedgers" Method="ShowLedgers">
+    <ElementType Name="ShowLedgersResult">
+      <Column Name="type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.UpdateFiscalYearOnlogin" Method="UpdateFiscalYearOnlogin">
+    <Parameter Name="to" Type="System.DateTime" DbType="Date" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
